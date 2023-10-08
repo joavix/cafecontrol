@@ -10,26 +10,31 @@ define("CONF_DB_NAME", "cafecontrol");
 /**
  * PROJECT URLs
  */
-define("CONF_URL_BASE", "https://www.localhost/cafecontrol/");
+define("CONF_URL_BASE", "http://www.cafecontrol.com.br");
+define("CONF_URL_TEST", "http://www.localhost/cafecontrol");
 define("CONF_URL_ADMIN", "/admin");
 
 /**
  * SITE
  */
-define("CONF_SITE_NAME", "xxxxxxx");
+define("CONF_SITE_NAME", "CaféControl");
+define("CONF_SITE_TITLE", "Gerencie suas contas com o melhor café");
+define("CONF_SITE_DESC", "O CafeControl é um gerenciador de contas simples, poderoso e gratuito. O prazer de tomar um café e ter o controle total de suas contas.");
 define("CONF_SITE_LANG", "pt_BR");
-define("CONF_SITE_DOMAIN", "xxxxxxx.com.br");
+define("CONF_SITE_DOMAIN", "upinside.com.br");
 
 /**
  * SOCIAL
  */
-define("CONF_SOCIAL_TWITTER_CREATOR", "@");
-define("CONF_SOCIAL_TWITTER_PUBLISHER", "@");
+define("CONF_SOCIAL_TWITTER_CREATOR", "");
+define("CONF_SOCIAL_TWITTER_PUBLISHER", "");
 define("CONF_SOCIAL_FACEBOOK_APP", "");
 define("CONF_SOCIAL_FACEBOOK_PAGE", "");
 define("CONF_SOCIAL_FACEBOOK_AUTHOR", "");
 define("CONF_SOCIAL_GOOGLE_PAGE", "");
 define("CONF_SOCIAL_GOOGLE_AUTHOR", "");
+define("CONF_SOCIAL_INSTAGRAM_PAGE", "");
+define("CONF_SOCIAL_YOUTUBE_PAGE", "");
 
 /**
  * DATES
@@ -59,6 +64,7 @@ define("CONF_MESSAGE_ERROR", "error");
  */
 define("CONF_VIEW_PATH", __DIR__ . "/../../shared/views");
 define("CONF_VIEW_EXT", "php");
+define("CONF_VIEW_THEME", "cafecontrol");
 
 /**
  * UPLOAD
@@ -78,13 +84,12 @@ define("CONF_IMAGE_QUALITY", ["jpg" => 75, "png" => 5]);
 /**
  * MAIL
  */
-//AUTH
-define("CONF_MAIL_HOST", "");
-define("CONF_MAIL_PORT", "");
+define("CONF_MAIL_HOST", "smtp.sendgrid.net");
+define("CONF_MAIL_PORT", "587");
 define("CONF_MAIL_USER", "apikey");
 define("CONF_MAIL_PASS", "");
 define("CONF_MAIL_SENDER", ["name" => "", "address" => ""]);
-// CONFIG
+define("CONF_MAIL_SUPPORT", "");
 define("CONF_MAIL_OPTION_LANG", "br");
 define("CONF_MAIL_OPTION_HTML", true);
 define("CONF_MAIL_OPTION_AUTH", true);

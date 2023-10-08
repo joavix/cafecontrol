@@ -7,7 +7,7 @@ use PHPMailer\PHPMailer\Exception;
 
 /**
  * Class Email
- * @package Source\Core
+ * @package Source\Support
  */
 class Email
 {
@@ -60,6 +60,11 @@ class Email
         return $this;
     }
 
+    /**
+     * @param string $filePath
+     * @param string $fileName
+     * @return $this
+     */
     public function attach(string $filePath, string $fileName): Email
     {
         $this->data->attach[$filePath] = $fileName;
@@ -123,5 +128,4 @@ class Email
     {
         return $this->message;
     }
-
 }

@@ -18,18 +18,19 @@
       "Source\\": "source/"
     },
     "files": [
-      "source/Support/Config.php",
-      "source/Support/Helpers.php"
+      "source/Boot/Config.php",
+      "source/Boot/Helpers.php",
+      "source/Boot/Minify.php"
     ]
   },
   "require": {
-    "php": "^7.1",
-    "ext-pdo": "^7.1",
     "phpmailer/phpmailer": "~6.0",
-    "league/plates": "v4.0.0-alpha",
+    "league/plates": "3.*",
+    "matthiasmullie/minify" : "^1.3",
     "coffeecode/uploader": "^1.0",
     "coffeecode/cropper": "^1.0",
-    "coffeecode/optimizer": "^1.0",
-    "coffeecode/paginator": "^1.0"
+    "coffeecode/optimizer": "^2.0",
+    "coffeecode/paginator": "^1.0",
+    "coffeecode/router": "1.0.*"
   }
 }

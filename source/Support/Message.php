@@ -2,13 +2,17 @@
 
 namespace Source\Support;
 
+use Source\Core\Session;
+
 /**
  * Class Message
  * @package Source\Core
  */
 class Message
 {
+    /** @var string */
     private $text;
+    /** @var string */
     private $type;
 
     /**

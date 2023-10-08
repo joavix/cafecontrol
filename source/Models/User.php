@@ -36,7 +36,8 @@ class User extends Model
         string $email,
         string $password,
         string $document = null
-    ): User {
+    ): User
+    {
         $this->first_name = $firstName;
         $this->last_name = $lastName;
         $this->email = $email;

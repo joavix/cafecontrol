@@ -11,6 +11,7 @@ use \PDOException;
  */
 class Connect
 {
+    /** @const array */
     private const OPTIONS = [
         PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8",
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
@@ -18,12 +19,13 @@ class Connect
         PDO::ATTR_CASE => PDO::CASE_NATURAL
     ];
 
+    /** @var \PDO */
     private static $instance;
 
     /**
      * @return PDO
      */
-    public static function getInstance(): PDO
+    public static function getInstance(): ?\PDO
     {
         if (empty(self::$instance)) {
             try {
@@ -34,7 +36,7 @@ class Connect
                     self::OPTIONS
                 );
             } catch (PDOException $exception) {
-                die("<h1>Whoops! Erro ao conectar...</h1>");
+                redirect("/error/problemas");
             }
         }
 
