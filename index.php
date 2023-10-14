@@ -23,7 +23,8 @@ $route->get("/sobre", "Web:about");
 //blog
 $route->group("/blog");
 $route->get("/", "Web:blog");
-$route->get("/p/{page}", "Web:blogPost");
+$route->get("/p/{page}", "Web:blog");
+$route->get("/{uri}", "Web:blogPost");
 $route->post("/buscar", "Web:blogSearch");
 $route->post("/buscar/{terms}/{page}", "Web:blogSearch");
 
