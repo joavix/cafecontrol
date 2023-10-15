@@ -43,6 +43,13 @@ $route->get("/obrigado/{email}", "Web:success");
 //services
 $route->get("/termos", "Web:terms");
 
+/**
+ * APP
+ */
+$route->group("/app");
+$route->get("/", "App:home");
+$route->get("/sair", "App:logout");
+
 /*
  * ERROR ROUTES
  */
