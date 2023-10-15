@@ -21,7 +21,13 @@ define("CONF_SITE_NAME", "CaféControl");
 define("CONF_SITE_TITLE", "Gerencie suas contas com o melhor café");
 define("CONF_SITE_DESC", "O CafeControl é um gerenciador de contas simples, poderoso e gratuito. O prazer de tomar um café e ter o controle total de suas contas.");
 define("CONF_SITE_LANG", "pt_BR");
-define("CONF_SITE_DOMAIN", "upinside.com.br");
+define("CONF_SITE_DOMAIN", "");
+define("CONF_SITE_ADDR_STREET", "");
+define("CONF_SITE_ADDR_NUMBER", "");
+define("CONF_SITE_ADDR_COMPLEMENT", "");
+define("CONF_SITE_ADDR_CITY", "");
+define("CONF_SITE_ADDR_STATE", "");
+define("CONF_SITE_ADDR_ZIPCODE", "");
 
 /**
  * SOCIAL
@@ -53,11 +59,11 @@ define("CONF_PASSWD_OPTION", ["cost" => 10]);
 /**
  * MESSAGE
  */
-define("CONF_MESSAGE_CLASS", "trigger");
-define("CONF_MESSAGE_INFO", "info");
-define("CONF_MESSAGE_SUCCESS", "success");
-define("CONF_MESSAGE_WARNING", "warning");
-define("CONF_MESSAGE_ERROR", "error");
+define("CONF_MESSAGE_CLASS", "message");
+define("CONF_MESSAGE_INFO", "info icon-info");
+define("CONF_MESSAGE_SUCCESS", "success icon-check-square-o");
+define("CONF_MESSAGE_WARNING", "warning icon-warning");
+define("CONF_MESSAGE_ERROR", "error icon-warning");
 
 /**
  * VIEW
