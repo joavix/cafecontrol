@@ -4,6 +4,7 @@ namespace Source\App;
 
 use Source\Core\Controller;
 use Source\Models\Auth;
+use Source\Models\Category;
 use Source\Models\Faq\Question;
 use Source\Models\Post;
 use Source\Models\User;
@@ -139,6 +140,44 @@ class Web extends Controller
             "title" => "PESQUISA POR:",
             "search" => $search,
             "blog" => $blogSearch->limit($pager->limit())->offset($pager->offset())->fetch(true),
+            "paginator" => $pager->render()
+        ]);
+    }
+
+    /**
+     * SITE BLOG CATEGORY
+     * @param array $data
+     * @return void
+     */
+    public function blogCategory(array $data): void
+    {
+        $categoryUri = filter_var($data["category"], FILTER_SANITIZE_STRIPPED);
+        $category = (new Category())->findByUri($categoryUri);
+
+        if (!$category) {
+            redirect("/blog");
+        }
+
+        $blogCategory = (new Post())->find("category = :c", "c={$category->id}");
+        $page = (!empty($data['page']) && filter_var($data['page'], FILTER_VALIDATE_INT) >= 1 ? $data['page'] : 1);
+        $pager = new Pager(url("/blog/em/{$category->uri}/"));
+        $pager->pager($blogCategory->count(), 9, $page);
+
+        $head = $this->seo->render(
+            "Artigos em{$category->title} - " . CONF_SITE_NAME,
+            $category->description,
+            url("/blog/em/{$category->uri}/{$page}"),
+            ($category->cover ? image($category->cover, 1200, 628) : theme("/assets/images/share.jpg"))
+        );
+
+        echo $this->view->render("blog", [
+            "head" => $head,
+            "Artigos em{$category->title}",
+            "desc" => $category->description,
+            "blog" => $blogCategory->limit($pager->limit())
+                ->offset($pager->offset())
+                ->order("post_at DESC")
+                ->fetch(true),
             "paginator" => $pager->render()
         ]);
     }

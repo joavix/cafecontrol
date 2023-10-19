@@ -3,10 +3,14 @@
         <img title="<?= $post->title; ?>" alt="<?= $post->title; ?>" src="<?= image($post->cover, 600, 340); ?>"/>
     </a>
     <header>
-        <p class="meta"><?= $post->category()->title; ?>
+        <p class="meta">
+            <a title="Artigos em <?= $post->category()->title; ?>"
+               href="<?= url("/blog/em/{$post->category()->uri}"); ?>"><?= $post->category()->title; ?></a>
             &bull; Por <?= "{$post->author()->first_name} {$post->author()->last_name}"; ?>
-            &bull; <?= date_fmt($post->post_at); ?>></p>
+            &bull; <?= date_fmt($post->post_at); ?>
+        </p>
         <h2><a title="<?= $post->title; ?>" href="<?= url("/blog/{$post->uri}"); ?>"><?= $post->title; ?></a></h2>
-        <p><a title="<?= $post->title; ?>" href="<?= url("/blog/{$post->uri}"); ?>"><?= str_limit_chars($post->subtitle, 120) ?></a></p>
+        <p><a title="<?= $post->title; ?>" href="<?= url("/blog/{$post->uri}"); ?>">
+                <?= str_limit_chars($post->subtitle, 120) ?></a></p>
     </header>
 </article>
