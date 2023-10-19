@@ -10,7 +10,7 @@ require __DIR__ . "/vendor/autoload.php";
 use Source\Core\Session;
 use CoffeeCode\Router\Router;
 
-$sesion = new Session();
+$session = new Session();
 $route = new Router(url(), ":");
 
 /*
