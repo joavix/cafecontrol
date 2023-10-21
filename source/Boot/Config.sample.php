@@ -57,26 +57,17 @@ define("CONF_PASSWD_ALGO", PASSWORD_DEFAULT);
 define("CONF_PASSWD_OPTION", ["cost" => 10]);
 
 /**
- * MESSAGE
- */
-define("CONF_MESSAGE_CLASS", "message");
-define("CONF_MESSAGE_INFO", "info icon-info");
-define("CONF_MESSAGE_SUCCESS", "success icon-check-square-o");
-define("CONF_MESSAGE_WARNING", "warning icon-warning");
-define("CONF_MESSAGE_ERROR", "error icon-warning");
-
-/**
  * VIEW
  */
 define("CONF_VIEW_PATH", __DIR__ . "/../../shared/views");
 define("CONF_VIEW_EXT", "php");
-define("CONF_VIEW_THEME", "cafecontrol");
+define("CONF_VIEW_THEME", "cafeweb");
 define("CONF_VIEW_APP", "cafeapp");
 
 /**
  * UPLOAD
  */
-define("CONF_UPLOAD_DIR", "../storage");
+define("CONF_UPLOAD_DIR", "storage");
 define("CONF_UPLOAD_IMAGE_DIR", "images");
 define("CONF_UPLOAD_FILE_DIR", "files");
 define("CONF_UPLOAD_MEDIA_DIR", "medias");
