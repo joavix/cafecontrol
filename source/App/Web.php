@@ -460,6 +460,9 @@ class Web extends Controller
                 "image" => theme("/assets/images/optin-success.jpg"),
                 "link" => url("/entrar"),
                 "linkTitle" => "Fazer Login"
+            ],
+            "track" => (object)[
+                "aw" => "AW-11385633693/oZmrCOnIr-8YEJ33i7Uq"
             ]
         ]);
     }

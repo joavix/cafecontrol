@@ -13,3 +13,11 @@
         </div>
     </div>
 </article>
+
+<?php if (!empty($track)): ?>
+    <?php $this->start("scripts"); ?>
+    <script>
+        gtag("event", "conversion", {send_to: "<?= $track->aw ?>"})
+    </script>
+    <?php $this->end(); ?>
+<?php endif; ?>

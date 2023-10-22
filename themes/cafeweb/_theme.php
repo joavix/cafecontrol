@@ -98,6 +98,7 @@
     </div>
 </footer>
 
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-11385633693"></script>
 <script src="<?= theme("/assets/scripts.js"); ?>"></script>
 <?= $this->section("scripts"); ?>
 
