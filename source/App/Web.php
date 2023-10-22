@@ -293,6 +293,12 @@ class Web extends Controller
                 return;
             }
 
+            if (request_repeat("webforget", $data["email"])) {
+                $json['message'] = $this->message->error("Ooops! Você já tentou esse e-mail antes")->render();
+                echo json_encode($json);
+                return;
+            }
+
             $auth = new Auth();
             if ($auth->forget($data["email"])) {
                 $json["message"] = $this->message->success("Acesse seu e-mail para recuperar a senha")->render();
