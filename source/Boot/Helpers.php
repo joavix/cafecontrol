@@ -320,9 +320,38 @@ function csrf_verify($request): bool
 function flash(): ?string
 {
     $session = new \Source\Core\Session();
-    if ($flash = $session->flash()){
+    if ($flash = $session->flash()) {
         echo $flash;
     }
 
     return null;
+}
+
+/**
+ * @param string $key
+ * @param int $limit
+ * @param int $seconds
+ * @return bool
+ */
+function request_limit(string $key, int $limit = 5, int $seconds = 60): bool
+{
+    $session = new \Source\Core\Session();
+    if ($session->has($key) && $session->$key->time >= time() && $session->$key->requests < $limit) {
+        $session->set($key, [
+            "time" => time() + $seconds,
+            "requests" => $session->$key->requests + 1
+        ]);
+        return false;
+    }
+
+    if ($session->has($key) && $session->$key->time >= time() && $session->$key->requests >= $limit) {
+        return true;
+    }
+
+    $session->set($key, [
+        "time" => time() + $seconds,
+        "requests" => 1
+    ]);
+
+    return false;
 }
