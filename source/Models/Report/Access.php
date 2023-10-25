@@ -53,31 +53,4 @@ class Access extends Model
         $find->save();
         return $this;
     }
-
-    /**
-     * @return bool
-     */
-    public function save(): bool
-    {
-        /** Update Access */
-        if (!empty($this->id)) {
-            $accessId = $this->id;
-            $this->update($this->safe(), "id = :id", "id={$accessId}");
-            if ($this->fail()) {
-                $this->message->error("Erro ao atualizar, verifique os dados");
-                return false;
-            }
-        }
-
-        if (empty($this->id)) {
-            $accessId = $this->create($this->safe());
-            if ($this->fail()) {
-                $this->message->error("Erro ao atualizar, verifique os dados");
-                return false;
-            }
-        }
-        /** Create Access */
-        $this->data = $this->findById($accessId)->data();
-        return true;
-    }
 }
