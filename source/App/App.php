@@ -37,6 +37,7 @@ class App extends Controller
 
         (new Access())->report();
         (new Online())->report();
+        (new AppInvoice())->fixed($this->user, "3");
     }
 
     /**
@@ -63,7 +64,7 @@ class App extends Controller
         $chartData->income = "0,0,0,0,0";
 
         $chart = (new AppInvoice())
-            ->find("user_id = :user AND status = :status AND due_at >= DATE(now() - INTERVAL 4 MONTH) GROUP BY year(due_at), month(due_at)",
+            ->find("user_id = :user AND status = :status AND due_at >= DATE(now() - INTERVAL 1 YEAR) GROUP BY year(due_at), month(due_at) ORDER BY due_at",
                 "user={$this->user->id}&status=paid",
                 "
                     year(due_at) AS due_year,
@@ -72,7 +73,7 @@ class App extends Controller
                     (SELECT SUM(value) FROM app_invoices WHERE user_id = :user AND status = :status AND type = 'income' AND year(due_at) = due_year AND month(due_at) = due_month) AS income,
                     (SELECT SUM(value) FROM app_invoices WHERE user_id = :user AND status = :status AND type = 'expense' AND year(due_at) = due_year AND month(due_at) = due_month) AS expense
                 "
-            )->limit(5)->fetch(true);
+            )->limit(13)->fetch(true);
 
         if ($chart) {
             $chartCategories = [];
