@@ -57,6 +57,7 @@ $route->get("/receber", "App:income");
 $route->get("/receber/{status}/{category}/{date}", "App:income");
 $route->get("/pagar", "App:expense");
 $route->get("/pagar/{status}/{category}/{date}", "App:expense");
+$route->get("/fixas", "App:fixed");
 $route->get("/fatura/{invoice}", "App:invoice");
 $route->get("/perfil", "App:profile");
 $route->get("/sair", "App:logout");
