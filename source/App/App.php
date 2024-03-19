@@ -7,6 +7,7 @@ use Source\Core\View;
 use Source\Models\Auth;
 use Source\Models\CafeApp\AppCategory;
 use Source\Models\CafeApp\AppInvoice;
+use Source\Models\CafeApp\AppWallet;
 use Source\Models\Post;
 use Source\Models\Report\Access;
 use Source\Models\Report\Online;
@@ -37,6 +38,7 @@ class App extends Controller
 
         (new Access())->report();
         (new Online())->report();
+        (new AppWallet())->start($this->user);
         (new AppInvoice())->fixed($this->user, "3");
     }
 
