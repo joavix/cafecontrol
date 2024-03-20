@@ -3,6 +3,7 @@
 namespace Source\App;
 
 use Source\Core\Controller;
+use Source\Core\Session;
 use Source\Core\View;
 use Source\Models\Auth;
 use Source\Models\CafeApp\AppCategory;
@@ -40,6 +41,16 @@ class App extends Controller
         (new Online())->report();
         (new AppWallet())->start($this->user);
         (new AppInvoice())->fixed($this->user, "3");
+
+        // UNCONFIRMED EMAIL
+        if ($this->user->status != "confirmed") {
+            $session = new Session();
+            if (!$session->has("appconfirmed")) {
+                $this->message->info("IMPORTANTE: acesse seu e-mail para confirmar seu cadastro e ativar todos os recursos.")->flash();
+                $session->set("appconfirmed", true);
+                (new Auth())->register($this->user);
+            }
+        }
     }
 
     /**
