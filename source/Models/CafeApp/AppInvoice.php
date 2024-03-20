@@ -58,6 +58,8 @@ class AppInvoice extends Model
                     $newItem->due_at = $item->format("Y-m-d");
                     $newItem->status = ($item->format("Y-m-d") <= date("Y-m-d") ? "paid" : "unpaid");
                     $newItem->save();
+
+                    break;
                 }
             }
         }

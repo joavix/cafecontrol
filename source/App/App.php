@@ -112,8 +112,8 @@ class App extends Controller
         $wallet = (new AppInvoice())->find("user_id = :user AND status = :status",
             "user={$this->user->id}&status=paid",
             "
-        (SELECT SUM(value) FROM app_invoices WHERE user_id = :user AND type = 'income') AS income,
-        (SELECT SUM(value) FROM app_invoices WHERE user_id = :user AND type = 'expense') AS expense
+        (SELECT SUM(value) FROM app_invoices WHERE user_id = :user AND type = 'income' AND status = :status) AS income,
+        (SELECT SUM(value) FROM app_invoices WHERE user_id = :user AND type = 'expense' AND status = :status) AS expense
         ")->fetch();
 
         if ($wallet) {
@@ -392,10 +392,69 @@ class App extends Controller
     }
 
     /**
-     * APP INVOICE (Fatura)
+     * @param array $data
+     * @return void
      */
-    public function invoice()
+    public function invoice(array $data): void
     {
+        if (!empty($data["update"])) {
+            $invoice = (new AppInvoice())->find("user_id = :user AND id = :id",
+                "user={$this->user->id}&id={$data["invoice"]}")->fetch();
+
+            if (!$invoice) {
+                $json["message"] = $this->message->error("Ooops! Não foi possível carregar a fatura {$this->user->first_name}. Você pode tentar novamente.")->render();
+                echo json_encode($json);
+                return;
+            }
+
+            if ($data["due_day"] < 1 || $data["due_day"] > $dayOfMonth = date("t", strtotime($invoice->due_at))) {
+                $json["message"] = $this->message->warning("O vencimento deve ser entre dia 1 e dia {$dayOfMonth} para este mês.")->render();
+                echo json_encode($json);
+                return;
+            }
+
+            $data = filter_var_array($data, FILTER_SANITIZE_STRIPPED);
+            $due_day = date("Y-m", strtotime($invoice->due_at)) . "-" . $data["due_day"];
+            $invoice->category_id = $data["category"];
+            $invoice->due_at = date("Y-m-d", strtotime($due_day));
+            $invoice->value = str_replace([".", ","], ["", "."], $data["value"]);
+            $invoice->wallet_id = $data["wallet"];
+            $invoice->status = $data["status"];
+
+            if (!$invoice->save()) {
+                $json["message"] = $invoice->message()->before("Ooops! ")->after(" {$this->user->first_name}.")->render();
+                echo json_encode($json);
+                return;
+            }
+
+            $invoiceOf = (new AppInvoice())->find("user_id = :user AND invoice_of = :of",
+                "user={$this->user->id}&of={$invoice->id}")->fetch(true);
+
+            if (!empty($invoiceOf) && in_array($invoice->type, ["fixed_income", "fixed_expense"])) {
+                foreach ($invoiceOf as $invoiceItem) {
+                    if ($data["status"] == "unpaid" && $invoiceItem->status == "unpaid") {
+                        $invoiceItem->destroy();
+                    } else {
+                        $due_day = date("Y-m", strtotime($invoiceItem->due_at)) . "-" . $data["due_day"];
+                        $invoiceItem->category_id = $data["category"];
+                        $invoiceItem->description = $data["description"];
+                        $invoiceItem->wallet_id = $data["wallet"];
+
+                        if ($invoiceItem->status == "unpaid") {
+                            $invoiceItem->value = str_replace([".", ","], ["", "."], $data["value"]);
+                            $invoiceItem->due_at = date("Y-m-d", strtotime($due_day));
+                        }
+
+                        $invoiceItem->save();
+                    }
+                }
+            }
+
+            $json["message"] = $this->message->success("Pronto {$this->user->first_name}, a atualização foi efetuada com sucesso!")->render();
+            echo json_encode($json);
+            return;
+        }
+
         $head = $this->seo->render(
             "Aluguel - " . CONF_SITE_NAME,
             CONF_SITE_DESC,
@@ -404,9 +463,44 @@ class App extends Controller
             false
         );
 
+        $invoice = (new AppInvoice())->find("user_id = :user AND id = :invoice",
+            "user={$this->user->id}&invoice={$data["invoice"]}")->fetch();
+
+        if (!$invoice) {
+            $this->message->error("Ooops, Você tentou acessar uma fatura que não existe")->flash();
+            redirect("/app");
+        }
+
         echo $this->view->render("invoice", [
-            "head" => $head
+            "head" => $head,
+            "invoice" => $invoice,
+            "wallets" => (new AppWallet())
+                ->find("user_id = :user", "user={$this->user->id}", "id, wallet")
+                ->order("wallet")
+                ->fetch(true),
+            "categories" => (new AppCategory())
+                ->find("type = :type", "type={$invoice->category()->type}")
+                ->order("order_by")
+                ->fetch(true)
         ]);
+    }
+
+    /**
+     * @param array $data
+     * @return void
+     */
+    public function remove(array $data): void
+    {
+        $invoice = (new AppInvoice())->find("user_id = :user AND id = :invoice",
+            "user={$this->user->id}&invoice={$data["invoice"]}")->fetch();
+
+        if ($invoice) {
+            $invoice->destroy();
+        }
+
+        $this->message->success("Tudo pronto {$this->user->first_name}. O lançamento foi removido com sucesso!")->flash();
+        $json["redirect"] = url_back();
+        echo json_encode($json);
     }
 
     /**
