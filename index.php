@@ -68,6 +68,7 @@ $route->post("/remove/{invoice}", "App:remove");
 $route->post("/support", "App:support");
 $route->post("/onpaid", "App:onpaid");
 $route->post("/filter", "App:filter");
+$route->post("/profile", "App:profile");
 
 /*
  * ERROR ROUTES

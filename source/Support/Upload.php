@@ -46,7 +46,7 @@ class Upload
             return null;
         }
 
-        return $upload->upload($image, $name, $width, CONF_IMAGE_QUALITY);
+        return str_replace(CONF_UPLOAD_DIR . "/", "", $upload->upload($image, $name, $width, CONF_IMAGE_QUALITY));
     }
 
     /**
@@ -63,7 +63,7 @@ class Upload
             return null;
         }
 
-        return $upload->upload($file, $name);
+        return str_replace(CONF_UPLOAD_DIR . "/", "", $upload->upload($file, $name));
     }
 
     /**
@@ -80,7 +80,7 @@ class Upload
             return null;
         }
 
-        return $upload->upload($media, $name);
+        return str_replace(CONF_UPLOAD_DIR . "/", "", $upload->upload($media, $name));
     }
 
     /**
