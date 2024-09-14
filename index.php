@@ -7,16 +7,17 @@ require __DIR__ . "/vendor/autoload.php";
  * BOOTSTRAP
  */
 
-use Source\Core\Session;
 use CoffeeCode\Router\Router;
+use Source\Core\Session;
 
 $session = new Session();
 $route = new Router(url(), ":");
+$route->namespace("Source\App");
 
 /*
  * WEB ROUTES
  */
-$route->namespace("Source\App");
+$route->group(null);
 $route->get("/", "Web:home");
 $route->get("/sobre", "Web:about");
 
@@ -39,13 +40,15 @@ $route->post("/cadastrar", "Web:register");
 $route->get("/recuperar", "Web:forget");
 $route->post("/recuperar", "Web:forget");
 $route->get("/recuperar/{code}", "Web:reset");
-$route->post("/recuperar/{resetar}", "Web:reset");
+$route->post("/recuperar/resetar", "Web:reset");
 
 //optin
+$route->group(null);
 $route->get("/confirma", "Web:confirm");
 $route->get("/obrigado/{email}", "Web:success");
 
 //services
+$route->group(null);
 $route->get("/termos", "Web:terms");
 
 /**

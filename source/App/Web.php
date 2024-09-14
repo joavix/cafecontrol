@@ -120,9 +120,9 @@ class Web extends Controller
         $page = (filter_var($data['page'], FILTER_VALIDATE_INT) >= 1 ? $data['page'] : 1);
 
         $head = $this->seo->render(
-            "pesquisa por {$search} - " . CONF_SITE_NAME,
+            "Pesquisa por {$search} - " . CONF_SITE_NAME,
             "Confira os resultados de sua pesquisa para {$search}",
-            url("blog/buscar/{$search}/{$page}"),
+            url("/blog/buscar/{$search}/{$page}"),
             theme("/assets/images/share.jpg")
         );
 
@@ -138,7 +138,7 @@ class Web extends Controller
         }
 
         $pager = new Pager(url("/blog/buscar/{$search}/"));
-        $pager->Pager($blogSearch->count(), 9, $page);
+        $pager->pager($blogSearch->count(), 9, $page);
 
         echo $this->view->render("blog", [
             "head" => $head,
@@ -194,7 +194,7 @@ class Web extends Controller
      */
     public function blogPost(array $data): void
     {
-        $post = (new Post())->findByUri($data["uri"]);
+        $post = (new Post())->findByUri($data['uri']);
         if (!$post) {
             redirect("/404");
         }
@@ -227,9 +227,13 @@ class Web extends Controller
      */
     public function login(?array $data): void
     {
+        if (Auth::user()) {
+            redirect("/app");
+        }
+
         if (!empty($data['csrf'])) {
             if (!csrf_verify($data)) {
-                $json['message'] = $this->message->error("Erro ao enviar, favor utilize o formulário")->render();
+                $json['message'] = $this->message->error("Erro ao enviar, favor use o formulário")->render();
                 echo json_encode($json);
                 return;
             }
@@ -251,7 +255,7 @@ class Web extends Controller
             $login = $auth->login($data['email'], $data['password'], $save);
 
             if ($login) {
-                $this->message->success("Seja bem vindo(a) de volta " . Auth::user()->first_name . "!")->flash();
+                $this->message->success("Seja bem-vindo(a) de volta " . Auth::user()->first_name . "!")->flash();
                 $json['redirect'] = url("/app");
             } else {
                 $json['message'] = $auth->message()->before("Ooops! ")->render();
@@ -275,27 +279,31 @@ class Web extends Controller
     }
 
     /**
-     * SITE FORGET
+     * SITE PASSWORD FORGET
      * @param null|array $data
      * @return void
      */
     public function forget(?array $data): void
     {
+        if (Auth::user()) {
+            redirect("/app");
+        }
+
         if (!empty($data['csrf'])) {
             if (!csrf_verify($data)) {
-                $json['message'] = $this->message->error("Erro ao enviar, favor utilize o formulário")->render();
+                $json['message'] = $this->message->error("Erro ao enviar, favor use o formulário")->render();
                 echo json_encode($json);
                 return;
             }
 
-            if (empty($data['email'])) {
+            if (empty($data["email"])) {
                 $json['message'] = $this->message->info("Informe seu e-mail para continuar")->render();
                 echo json_encode($json);
                 return;
             }
 
             if (request_repeat("webforget", $data["email"])) {
-                $json['message'] = $this->message->error("Ooops! Você já tentou esse e-mail antes")->render();
+                $json['message'] = $this->message->error("Ooops! Você já tentou este e-mail antes")->render();
                 echo json_encode($json);
                 return;
             }
@@ -310,6 +318,7 @@ class Web extends Controller
             echo json_encode($json);
             return;
         }
+
         $head = $this->seo->render(
             "Recuperar Senha - " . CONF_SITE_NAME,
             CONF_SITE_DESC,
@@ -318,7 +327,7 @@ class Web extends Controller
         );
 
         echo $this->view->render("auth-forget", [
-            "head" => $head,
+            "head" => $head
         ]);
     }
 
@@ -329,15 +338,19 @@ class Web extends Controller
      */
     public function reset(array $data): void
     {
+        if (Auth::user()) {
+            redirect("/app");
+        }
+
         if (!empty($data['csrf'])) {
             if (!csrf_verify($data)) {
-                $json['message'] = $this->message->error("Erro ao enviar, favor utilize o formulário")->render();
+                $json['message'] = $this->message->error("Erro ao enviar, favor use o formulário")->render();
                 echo json_encode($json);
                 return;
             }
 
-            if (empty($data['password']) || empty($data['password_re'])) {
-                $json["message"] = $this->message->info("informe e repita a senha para continuar")->render();
+            if (empty($data["password"]) || empty($data["password_re"])) {
+                $json["message"] = $this->message->info("Informe e repita a senha para continuar")->render();
                 echo json_encode($json);
                 return;
             }
@@ -346,7 +359,7 @@ class Web extends Controller
             $auth = new Auth();
 
             if ($auth->reset($email, $code, $data["password"], $data["password_re"])) {
-                $this->message->success("Senha alterada com sucesso, vamos controlar?")->flash();
+                $this->message->success("Senha alterada com sucesso. Vamos controlar?")->flash();
                 $json["redirect"] = url("/entrar");
             } else {
                 $json["message"] = $auth->message()->before("Ooops! ")->render();
@@ -376,9 +389,13 @@ class Web extends Controller
      */
     public function register(?array $data): void
     {
+        if (Auth::user()) {
+            redirect("/app");
+        }
+
         if (!empty($data['csrf'])) {
             if (!csrf_verify($data)) {
-                $json['message'] = $this->message->error("Erro ao enviar, favor utilize o formulário")->render();
+                $json['message'] = $this->message->error("Erro ao enviar, favor use o formulário")->render();
                 echo json_encode($json);
                 return;
             }
@@ -392,11 +409,12 @@ class Web extends Controller
             $auth = new Auth();
             $user = new User();
             $user->bootstrap(
-                $data['first_name'],
-                $data['last_name'],
-                $data['email'],
-                $data['password']
+                $data["first_name"],
+                $data["last_name"],
+                $data["email"],
+                $data["password"]
             );
+
             if ($auth->register($user)) {
                 $json['redirect'] = url("/confirma");
             } else {
@@ -415,10 +433,9 @@ class Web extends Controller
         );
 
         echo $this->view->render("auth-register", [
-            "head" => $head,
+            "head" => $head
         ]);
     }
-
 
     /**
      * SITE OPT-IN CONFIRM
@@ -459,7 +476,7 @@ class Web extends Controller
         }
 
         $head = $this->seo->render(
-            "Bem vindo(a) ao " . CONF_SITE_NAME,
+            "Bem-vindo(a) ao " . CONF_SITE_NAME,
             CONF_SITE_DESC,
             url("/obrigado"),
             theme("/assets/images/share.jpg")
@@ -493,7 +510,7 @@ class Web extends Controller
         );
 
         echo $this->view->render("terms", [
-            "head" => $head,
+            "head" => $head
         ]);
     }
 

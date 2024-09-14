@@ -85,6 +85,7 @@ class AppInvoice extends Model
             "user_id = :user AND type = :type {$status} {$category} {$due_at}",
             "user={$user->id}&type={$type}"
         )->order("day(due_at) ASC");
+
         if ($limit) {
             $due->limit($limit);
         }

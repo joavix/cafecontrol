@@ -17,7 +17,7 @@ class Auth extends Model
      */
     public function __construct()
     {
-        parent::__construct("user", ["id"], ["email", "password"]);
+        parent::__construct("users", ["id"], ["email", "password"]);
     }
 
     /**
@@ -111,7 +111,7 @@ class Auth extends Model
             $user->save();
         }
 
-        // LOGIN
+        //LOGIN
         (new Session())->set("authUser", $user->id);
         $this->message->success("Login efetuado com sucesso")->flash();
         return true;
@@ -126,7 +126,7 @@ class Auth extends Model
         $user = (new User())->findByEmail($email);
 
         if (!$user) {
-            $this->message->warning("O e-mail informado não está cadastrado");
+            $this->message->warning("O e-mail informado não está cadastrado.");
             return false;
         }
 
@@ -161,24 +161,24 @@ class Auth extends Model
         $user = (new User())->findByEmail($email);
 
         if (!$user) {
-            $this->message->warning("A conta para recuperação não foi encontrada");
+            $this->message->warning("A conta para recuperação não foi encontrada.");
             return false;
         }
 
         if ($user->forget != $code) {
-            $this->message->error("Desculpe, mas o código de verificação não é válido");
+            $this->message->error("Desculpe, mas o código de verificação não é válido.");
             return false;
         }
 
         if (!is_passwd($password)) {
             $min = CONF_PASSWD_MIN_LEN;
             $max = CONF_PASSWD_MAX_LEN;
-            $this->message->info("Sua senha deve ter entre {$min} e {$max} caracteres");
+            $this->message->info("Sua senha deve ter entre {$min} e {$max} caracteres.");
             return false;
         }
 
         if ($password != $passwordRe) {
-            $this->message->warning("Você informou duas senhas diferentes");
+            $this->message->warning("Você informou duas senhas diferentes.");
             return false;
         }
 

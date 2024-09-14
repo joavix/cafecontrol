@@ -19,7 +19,8 @@ class Post extends Model
      */
     public function __construct(bool $all = false)
     {
-        parent::__construct("posts", ["id"], ["title", "id", "subtitle", "content"]);
+        $this->all = $all;
+        parent::__construct("posts", ["id"], ["title", "uri", "subtitle", "content"]);
     }
 
     /**
@@ -34,7 +35,6 @@ class Post extends Model
             $terms = "status = :status AND post_at <= NOW()" . ($terms ? " AND {$terms}" : "");
             $params = "status=post" . ($params ? "&{$params}" : "");
         }
-
         return parent::find($terms, $params, $columns);
     }
 

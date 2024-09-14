@@ -11,6 +11,6 @@
         </p>
         <h2><a title="<?= $post->title; ?>" href="<?= url("/blog/{$post->uri}"); ?>"><?= $post->title; ?></a></h2>
         <p><a title="<?= $post->title; ?>" href="<?= url("/blog/{$post->uri}"); ?>">
-                <?= str_limit_chars($post->subtitle, 120) ?></a></p>
+                <?= str_limit_chars($post->subtitle, 120); ?></a></p>
     </header>
 </article>

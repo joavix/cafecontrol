@@ -144,12 +144,12 @@ abstract class Model
     }
 
     /**
-     * @param string $columOrder
+     * @param string $columnOrder
      * @return Model
      */
-    public function order(string $columOrder): Model
+    public function order(string $columnOrder): Model
     {
-        $this->order = " ORDER BY {$columOrder}";
+        $this->order = " ORDER BY {$columnOrder}";
         return $this;
     }
 
@@ -274,14 +274,15 @@ abstract class Model
             }
         }
 
+        /** Create */
         if (empty($this->id)) {
             $id = $this->create($this->safe());
             if ($this->fail()) {
-                $this->message->error("Erro ao atualizar, verifique os dados");
+                $this->message->error("Erro ao cadastrar, verifique os dados");
                 return false;
             }
         }
-        /** Create */
+
         $this->data = $this->findById($id)->data();
         return true;
     }

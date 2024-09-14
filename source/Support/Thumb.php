@@ -12,6 +12,7 @@ class Thumb
 {
     /** @var Cropper */
     private $cropper;
+
     /** @var string */
     private $uploads;
 
@@ -31,7 +32,7 @@ class Thumb
      * @param int|null $height
      * @return string
      */
-    public function make(string $image, int $width, int $height = null): string
+    public function make(string $image, int $width, ?int $height = null): string
     {
         return $this->cropper->make("{$this->uploads}/{$image}", $width, $height);
     }
@@ -40,7 +41,7 @@ class Thumb
      * @param string|null $image
      * @return void
      */
-    public function flush(string $image = null): void
+    public function flush(?string $image = null): void
     {
         if ($image) {
             $this->cropper->flush("{$this->uploads}/{$image}");

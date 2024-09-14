@@ -12,13 +12,13 @@
         </form>
     </header>
 
-    <?php if (empty($blog) && !empty($search)) : ?>
+    <?php if (empty($blog) && !empty($search)): ?>
         <div class="content content">
             <div class="empty_content">
                 <h3 class="empty_content_title">Sua pesquisa não retornou resultados :/</h3>
                 <p class="empty_content_desc">Você pesquisou por <b><?= $search; ?></b>. Tente outros termos.</p>
                 <a class="empty_content_btn gradient gradient-green gradient-hover radius"
-                   href="<?= url("/blog"); ?>" title="Blog">... Ou volte ao blog</a>
+                   href="<?= url("/blog"); ?>" title="Blog">...ou volte ao blog</a>
             </div>
         </div>
 

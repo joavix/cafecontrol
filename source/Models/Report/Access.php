@@ -7,7 +7,7 @@ use Source\Core\Session;
 
 /**
  * Class Access
- * @package Source\Model\Report
+ * @package Source\Models\Report
  */
 class Access extends Model
 {

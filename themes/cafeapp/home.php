@@ -60,7 +60,7 @@
             </ul>
 
             <article
-                class="app_flex <?= (!empty($wallet->wallet) && $wallet->wallet >= 0 ? "gradient-green" : "gradient-red"); ?>">
+                    class="app_flex <?= (!empty($wallet->wallet) && $wallet->wallet >= 0 ? "gradient-green" : "gradient-red"); ?>">
                 <header class="app_flex_title">
                     <h2 class="icon-money">Saldo</h2>
                 </header>
@@ -105,6 +105,7 @@
                 thousandsSep: '.'
             }
         });
+
         Highcharts.chart('control', {
             chart: {
                 type: 'areaspline',

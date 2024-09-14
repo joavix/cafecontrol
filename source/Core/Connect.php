@@ -46,7 +46,7 @@ class Connect
     /**
      * Connect constructor.
      */
-    final private function __construct()
+    private function __construct()
     {
     }
 

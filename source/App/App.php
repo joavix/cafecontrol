@@ -14,7 +14,6 @@ use Source\Models\Report\Access;
 use Source\Models\Report\Online;
 use Source\Models\User;
 use Source\Support\Email;
-use Source\Support\Message;
 use Source\Support\Thumb;
 use Source\Support\Upload;
 
@@ -41,14 +40,15 @@ class App extends Controller
 
         (new Access())->report();
         (new Online())->report();
-        (new AppWallet())->start($this->user);
-        (new AppInvoice())->fixed($this->user, "3");
 
-        // UNCONFIRMED EMAIL
+        (new AppWallet())->start($this->user);
+        (new AppInvoice())->fixed($this->user, 3);
+
+        //UNCONFIRMED EMAIL
         if ($this->user->status != "confirmed") {
             $session = new Session();
             if (!$session->has("appconfirmed")) {
-                $this->message->info("IMPORTANTE: acesse seu e-mail para confirmar seu cadastro e ativar todos os recursos.")->flash();
+                $this->message->info("IMPORTANTE: Acesse seu e-mail para confirmar seu cadastro e ativar todos os recursos.")->flash();
                 $session->set("appconfirmed", true);
                 (new Auth())->register($this->user);
             }
@@ -71,8 +71,9 @@ class App extends Controller
         //CHART
         $dateChart = [];
         for ($month = -4; $month <= 0; $month++) {
-            $dateChart[] = date("d/m/Y", strtotime("last day of {$month}month"));
+            $dateChart[] = date("m/Y", strtotime("{$month}month"));
         }
+
         $chartData = new \stdClass();
         $chartData->categories = "'" . implode("','", $dateChart) . "'";
         $chartData->expense = "0,0,0,0,0";
@@ -270,13 +271,13 @@ class App extends Controller
     public function launch(array $data): void
     {
         if (request_limit("applaunch", 20, 60 * 5)) {
-            $json["message"] = $this->message->warning("Foi muito rápido {$this->user->first_name}! Por favor aguarde 5 minutos para novos lançamentos")->render();
+            $json["message"] = $this->message->warning("Foi muito rápido {$this->user->first_name}! Por favor aguarde 5 minutos para novos lançamentos.")->render();
             echo json_encode($json);
             return;
         }
 
         if (!empty($data["enrollments"]) && ($data["enrollments"] < 2 || $data["enrollments"] > 420)) {
-            $json["message"] = $this->message->warning("Ooops {$this->user->first_name}! Para lançar, o número de parcelas deve ser entre 2 e 420")->render();
+            $json["message"] = $this->message->warning("Ooops {$this->user->first_name}! Para lançar, o número de parcelas deve ser entre 2 e 420.")->render();
             echo json_encode($json);
             return;
         }
@@ -336,19 +337,19 @@ class App extends Controller
     public function support(array $data): void
     {
         if (empty($data["message"])) {
-            $json["message"] = $this->message->warning("Para enviar, escreva sua mensagem.")->render();
+            $json["message"] = $this->message->warning("Para enviar escreva sua mensagem.")->render();
             echo json_encode($json);
             return;
         }
 
-        if (request_limit("appsuport", 3, 60 * 5)) {
+        if (request_limit("appsupport", 3, 60 * 5)) {
             $json["message"] = $this->message->warning("Por favor, aguarde 5 minutos para enviar novos contatos, sugestões ou reclamações")->render();
             echo json_encode($json);
             return;
         }
 
         if (request_repeat("message", $data["message"])) {
-            $json["message"] = $this->message->info("Já recebemos sua solicitação {$this->user->first_name}. Agradecemos pelo contato e responderemos em breve!")->render();
+            $json["message"] = $this->message->info("Já recebemos sua solicitação {$this->user->first_name}. Agradecemos pelo contato e responderemos em breve.")->render();
             echo json_encode($json);
             return;
         }
@@ -369,7 +370,7 @@ class App extends Controller
             "Suporte " . CONF_SITE_NAME
         )->queue($this->user->email, "{$this->user->first_name} {$this->user->last_name}");
 
-        $this->message->success("Recbemos sua solicitação {$this->user->first_name}. Agradecemos pelo contato e responderemos em breve!")->flash();
+        $this->message->success("Recebemos sua solicitação {$this->user->first_name}. Agradecemos pelo contato e responderemos em breve.")->flash();
         $json["reload"] = true;
         echo json_encode($json);
     }
@@ -429,6 +430,7 @@ class App extends Controller
             $data = filter_var_array($data, FILTER_SANITIZE_STRIPPED);
             $due_day = date("Y-m", strtotime($invoice->due_at)) . "-" . $data["due_day"];
             $invoice->category_id = $data["category"];
+            $invoice->description = $data["description"];
             $invoice->due_at = date("Y-m-d", strtotime($due_day));
             $invoice->value = str_replace([".", ","], ["", "."], $data["value"]);
             $invoice->wallet_id = $data["wallet"];
@@ -480,7 +482,7 @@ class App extends Controller
             "user={$this->user->id}&invoice={$data["invoice"]}")->fetch();
 
         if (!$invoice) {
-            $this->message->error("Ooops, Você tentou acessar uma fatura que não existe")->flash();
+            $this->message->error("Ooops! Você tentou acessar uma fatura que não existe")->flash();
             redirect("/app");
         }
 
@@ -512,7 +514,7 @@ class App extends Controller
         }
 
         $this->message->success("Tudo pronto {$this->user->first_name}. O lançamento foi removido com sucesso!")->flash();
-        $json["redirect"] = url_back();
+        $json["redirect"] = url("/app");
         echo json_encode($json);
     }
 
@@ -564,7 +566,7 @@ class App extends Controller
                 return;
             }
 
-            $json["message"] = $this->message->success("Pronto {$this->user->first_name}. Seus dados foram atualizados com sucesso")->render();
+            $json["message"] = $this->message->success("Pronto {$this->user->first_name}. Seus dados foram atualizados com sucesso!")->render();
             echo json_encode($json);
             return;
         }
@@ -580,7 +582,8 @@ class App extends Controller
         echo $this->view->render("profile", [
             "head" => $head,
             "user" => $this->user,
-            "photo" => ($this->user->photo() ? image($this->user->photo, 360, 360) : theme("/assets/images/avatar.jpg", CONF_VIEW_APP))
+            "photo" => ($this->user->photo() ? image($this->user->photo, 360, 360) :
+                theme("/assets/images/avatar.jpg", CONF_VIEW_APP))
         ]);
     }
 
@@ -589,7 +592,7 @@ class App extends Controller
      */
     public function logout(): void
     {
-        (new Message())->info("Você saiu com sucesso " . Auth::user()->first_name . ". Volte logo :)")->flash();
+        $this->message->info("Você saiu com sucesso " . Auth::user()->first_name . ". Volte logo :)")->flash();
 
         Auth::logout();
         redirect("/entrar");

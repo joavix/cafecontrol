@@ -7,7 +7,7 @@ use Source\Core\Session;
 
 /**
  * Class Online
- * @package Source\Model\Report
+ * @package Source\Models\Report
  */
 class Online extends Model
 {
@@ -38,8 +38,10 @@ class Online extends Model
         return $find->fetch(true);
     }
 
+
     /**
-     * @return Online
+     * @param bool $clear
+     * @return $this
      */
     public function report(bool $clear = true): Online
     {
@@ -77,7 +79,7 @@ class Online extends Model
     /**
      * @return void
      */
-    public function clear(): void
+    private function clear()
     {
         $this->delete("updated_at <= NOW() - INTERVAL {$this->sessionTime} MINUTE", null);
     }
