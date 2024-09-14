@@ -77,11 +77,14 @@
                     <?php if ($invoice->repeat_when == "fixed"): ?>
                         <span class="app_invoice_link">
                             <a href="<?= url("/app/fatura/{$invoice->invoice_of}"); ?>" class="icon-exchange"
-                               title="Controlar">Fixa</a>
+                               title="Controlar Conta Fixa">Fixa</a>
                         </span>
                     <?php elseif ($invoice->repeat_when == 'enrollment'): ?>
-                        <?= str_pad($invoice->enrollment_of, 2, 0, 0); ?> de <?= str_pad($invoice->enrollments, 2, 0,
-                            0); ?>
+                        <span class="app_invoice_link">
+                            <a href="<?= url("/app/fatura/{$invoice->invoice_of}"); ?>"
+                               title="Controlar Parcelamento"><?= str_pad($invoice->enrollment_of, 2, 0,
+                                    0); ?> de <?= str_pad($invoice->enrollments, 2, 0, 0); ?></a>
+                        </span>
                     <?php else: ?>
                         <span class="icon-calendar-check-o">Única</span>
                     <?php endif; ?>
