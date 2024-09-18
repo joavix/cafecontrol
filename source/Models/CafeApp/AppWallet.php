@@ -12,13 +12,26 @@ class AppWallet extends Model
         parent::__construct("app_wallets", ["id"], ["user_id", "wallet"]);
     }
 
+    /**
+     * @param User $user
+     * @return $this
+     */
     public function start(User $user): AppWallet
     {
         if (!$this->find("user_id = :user", "user={$user->id}")->count()) {
             $this->user_id = $user->id;
             $this->wallet = "Minha carteira";
+            $this->free = true;
             $this->save();
         }
         return $this;
+    }
+
+    /**
+     * @return object|float|int|\stdClass
+     */
+    public function balance(): object
+    {
+        return (new AppInvoice())->balanceWallet($this);
     }
 }

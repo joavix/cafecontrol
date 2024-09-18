@@ -57,6 +57,27 @@ class App extends Controller
 
     public function dash(?array $data): void
     {
+        if (!empty($data["wallet"])) {
+            $session = new Session();
+
+            if ($data["wallet"] == "all") {
+                $session->unset("walletfilter");
+                echo json_encode(["filter" => true]);
+                return;
+            }
+
+            $wallet = filter_var($data["wallet"], FILTER_VALIDATE_INT);
+            $getWallet = (new AppWallet())->find("user_id = :user AND id = :id",
+                "user={$this->user->id}&id={$wallet}")->count();
+
+            if ($getWallet) {
+                $session->set("walletfilter", $wallet);
+            }
+
+            echo json_encode(["filter" => true]);
+            return;
+        }
+
         //CHART UPDATE
         $chartData = (new AppInvoice())->chartData($this->user);
         $categories = str_replace("'", "", explode(",", $chartData->categories));
@@ -97,14 +118,19 @@ class App extends Controller
         //END CHART
 
         //INCOME && EXPENSE
+        $whereWallet = "";
+        if ((new Session())->has("walletfilter")) {
+            $whereWallet = "AND wallet_id = " . (new Session())->walletfilter;
+        }
+
         $income = (new AppInvoice())
-            ->find("user_id = :user AND type = 'income' AND status = 'unpaid' AND date(due_at) <= date(now() + INTERVAL 1 MONTH)",
+            ->find("user_id = :user AND type = 'income' AND status = 'unpaid' AND date(due_at) <= date(now() + INTERVAL 1 MONTH) {$whereWallet}",
                 "user={$this->user->id}")
             ->order("due_at")
             ->fetch(true);
 
         $expense = (new AppInvoice())
-            ->find("user_id = :user AND type = 'expense' AND status = 'unpaid' AND date(due_at) <= date(now() + INTERVAL 1 MONTH)",
+            ->find("user_id = :user AND type = 'expense' AND status = 'unpaid' AND date(due_at) <= date(now() + INTERVAL 1 MONTH) {$whereWallet}",
                 "user={$this->user->id}")
             ->order("due_at")
             ->fetch(true);
@@ -236,10 +262,75 @@ class App extends Controller
             false
         );
 
+        $whereWallet = "";
+        if ((new Session())->has("walletfilter")) {
+            $whereWallet = "AND wallet_id = " . (new Session())->walletfilter;
+        }
+
         echo $this->view->render("recurrences", [
             "head" => $head,
-            "invoices" => (new AppInvoice())->find("user_id = :user AND type IN('fixed_income', 'fixed_expense')",
+            "invoices" => (new AppInvoice())->find("user_id = :user AND type IN('fixed_income', 'fixed_expense') {$whereWallet}",
                 "user={$this->user->id}")->fetch(true)
+        ]);
+    }
+
+    public function wallets(?array $data)
+    {
+        //create
+        if (!empty($data["wallet"]) && !empty($data["wallet_name"])) {
+            $wallet = new AppWallet();
+            $wallet->user_id = $this->user->id;
+            $wallet->wallet = filter_var($data["wallet_name"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $wallet->save();
+
+            echo json_encode(["reload" => true]);
+            return;
+        }
+
+        //edit
+        if (!empty($data["wallet"]) && !empty($data["wallet_edit"])) {
+            $wallet = (new AppWallet())->find("user_id = :user AND id = :id",
+                "user={$this->user->id}&id={$data["wallet"]}")->fetch();
+
+            if ($wallet) {
+                $wallet->wallet = filter_var($data["wallet_edit"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                $wallet->save();
+            }
+
+            echo json_encode(["wallet_edit" => true]);
+            return;
+        }
+
+        //delete
+        if (!empty($data["wallet"]) && !empty($data["wallet_remove"])) {
+            $wallet = (new AppWallet())->find("user_id = :user AND id = :id",
+                "user={$this->user->id}&id={$data["wallet"]}")->fetch();
+
+            if ($wallet) {
+                $wallet->destroy();
+                (new Session())->unset("walletfilter");
+            }
+
+            echo json_encode(["wallet_remove" => true]);
+            return;
+        }
+
+        $head = $this->seo->render(
+            "Minhas carteiras - " . CONF_SITE_NAME,
+            CONF_SITE_DESC,
+            url(),
+            theme("/assets/images/share.jpg"),
+            false
+        );
+
+        $wallets = (new AppWallet())
+            ->find("user_id = :user", "user={$this->user->id}")
+            ->order("wallet")
+            ->fetch(true);
+
+        echo $this->view->render("wallets", [
+            "head" => $head,
+            "wallets" => $wallets
         ]);
     }
 
