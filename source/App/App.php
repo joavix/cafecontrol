@@ -8,6 +8,9 @@ use Source\Core\View;
 use Source\Models\Auth;
 use Source\Models\CafeApp\AppCategory;
 use Source\Models\CafeApp\AppInvoice;
+use Source\Models\CafeApp\AppOrder;
+use Source\Models\CafeApp\AppPlan;
+use Source\Models\CafeApp\AppSubscription;
 use Source\Models\CafeApp\AppWallet;
 use Source\Models\Post;
 use Source\Models\Report\Access;
@@ -654,6 +657,32 @@ class App extends Controller
             "user" => $this->user,
             "photo" => ($this->user->photo() ? image($this->user->photo, 360, 360) :
                 theme("/assets/images/avatar.jpg", CONF_VIEW_APP))
+        ]);
+    }
+
+    public function signature(?array $data): void
+    {
+        $head = $this->seo->render(
+            "Assinatura - " . CONF_SITE_NAME,
+            CONF_SITE_DESC,
+            url(),
+            theme("/assets/images/share.jpg"),
+            false
+        );
+
+        echo $this->view->render("signature", [
+            "head" => $head,
+            "subscription" => (new AppSubscription())
+                ->find("user_id = :user AND status != :status", "user={$this->user->id}&status={canceled}")
+                ->fetch(),
+            "orders" => (new AppOrder())
+                ->find("user_id = :user", "user={$this->user->id}")
+                ->order("created_at DESC")
+                ->fetch(true),
+            "plans" => (new AppPlan())
+                ->find("status = :status", "status=active")
+                ->order("name, price")
+                ->fetch(true)
         ]);
     }
 
