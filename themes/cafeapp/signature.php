@@ -1,14 +1,21 @@
-<?php $this->layout("_theme"); ?>
+<?php
 
-<?php if (!empty($subscription)): ?>
+$this->layout("_theme"); ?>
+
+<?php
+if (!empty($subscription)): ?>
     <article class="app_signature app_signature_me radius">
-        <?php if ($subscription->status == "past_due"): ?>
+        <?php
+        if ($subscription->status == "past_due"): ?>
             <div class="message warning icon-warning">
                 Importante <?= user()->first_name; ?>: Não foi possível cobrar seu cartão e sua assinatura está
                 atrasada, para não perder os recursos PRO é preciso regularizar seu pagamento.
-                <p style="margin-top: 20px">Cadastre um novo cartão de crédito <span data-go=".payment" class="message_btn">CLICANDO AQUI</span></p>
+                <p style="margin-top: 20px">Cadastre um novo cartão de crédito <span data-go=".payment"
+                                                                                     class="message_btn">CLICANDO AQUI</span>
+                </p>
             </div>
-        <?php endif; ?>
+        <?php
+        endif; ?>
 
         <header class="app_signature_me_header">
             <h1>Minha assinatura:</h1>
@@ -22,7 +29,8 @@
             <li><span>Início:</span> <span><?= date_fmt($subscription->started, "d/m/Y"); ?></span></li>
             <li><span>Valor:</span> <span>R$ <?= str_price($subscription->plan()->price); ?></span></li>
             <li><span>Cartão:</span>
-                <span style="text-transform: uppercase"><?= $subscription->creditCard()->brand; ?> Final <?= $subscription->creditCard()->last_digits; ?></span>
+                <span style="text-transform: uppercase"><?= $subscription->creditCard(
+                    )->brand; ?> Final <?= $subscription->creditCard()->last_digits; ?></span>
             </li>
             <li><span>Próximo pagamento:</span> <span><?= date_fmt($subscription->next_due, "d/m/Y"); ?></span></li>
         </ul>
@@ -33,17 +41,20 @@
         </div>
 
         <div class="app_signature_orders">
-            <?php if (empty($orders)): ?>
+            <?php
+            if (empty($orders)): ?>
                 <div class="message info icon-info al-center">Ainda não existem faturas para sua assinatura. Quando
                     existirem, você poderá conferi-las aqui.
                 </div>
-            <?php else: ?>
+            <?php
+            else: ?>
                 <div class="app_signature_orders_item title">
                     <p>Data</p>
                     <p>Valor</p>
                     <p>Cartão</p>
                 </div>
-                <?php foreach ($orders as $order):
+                <?php
+                foreach ($orders as $order):
                     $status = ($order->status == "paid" ? '<span class="icon-check" title="Paga"></span>' : ($order->status == "waiting" ? '<span class="icon-clock-o" title="Aguardando Pagamento"></span>' : '<span class="icon-error" title="Recusada"></span>')); ?>
                     <article class="app_signature_orders_item">
                         <p>
@@ -54,8 +65,10 @@
                         <p style="text-transform: uppercase;"><?= $order->creditCard()->brand; ?>
                             Final <?= $order->creditCard()->last_digits; ?></p>
                     </article>
-                <?php endforeach; ?>
-            <?php endif; ?>
+                <?php
+                endforeach; ?>
+            <?php
+            endif; ?>
         </div>
 
         <div class="app_signature_me_header payment">
@@ -64,11 +77,15 @@
         </div>
 
         <div class="app_signature_pay_card">
-            <?php $this->insert("views/signature",
-                ["plans" => null, "action" => url("/pay/update"), "btn" => "Cadastrar Cartão"]); ?>
+            <?php
+            $this->insert(
+                "views/signature",
+                ["plans" => null, "action" => url("/pay/update"), "btn" => "Cadastrar Cartão"]
+            ); ?>
         </div>
     </article>
-<?php else: ?>
+<?php
+else: ?>
     <article class="app_signature radius">
         <header class="app_signature_header gradient gradient-green">
             <span class="icon icon-coffee icon-notext"></span>
@@ -134,21 +151,26 @@
         </section>
 
         <article class="app_signature_pay">
-            <?php if (!$plans): ?>
+            <?php
+            if (!$plans): ?>
                 <div class="message info al-center">Desculpe <?= user()->first_name; ?>, mas no momento não existem
                     planos
                     para assinatura :/
                 </div>
-            <?php else: ?>
+            <?php
+            else: ?>
                 <header>
                     <h2 class="icon-coffee">Assine o PRO</h2>
                     <p>E libere todos os recursos do CaféApp</p>
                 </header>
 
                 <div class="app_signature_pay_card">
-                    <?php $this->insert("views/signature", ["plans" => $plans, "action" => url("/pay/create")]); ?>
+                    <?php
+                    $this->insert("views/signature", ["plans" => $plans, "action" => url("/pay/create")]); ?>
                 </div>
-            <?php endif; ?>
+            <?php
+            endif; ?>
         </article>
     </article>
-<?php endif; ?>
+<?php
+endif; ?>

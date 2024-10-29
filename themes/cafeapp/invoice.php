@@ -1,4 +1,5 @@
-<?php $this->layout("_theme"); ?>
+<?php
+$this->layout("_theme"); ?>
 <div class="app_formbox app_widget">
     <form class="app_form" action="<?= url("/app/invoice/{$invoice->id}"); ?>" method="post">
         <input type="hidden" name="update" value="true"/>
@@ -25,10 +26,12 @@
         <label>
             <span class="field icon-briefcase">Carteira:</span>
             <select name="wallet">
-                <?php foreach ($wallets as $wallet): ?>
+                <?php
+                foreach ($wallets as $wallet): ?>
                     <option <?= ($wallet->id == $invoice->wallet_id ? "selected" : ""); ?>
                             value="<?= $wallet->id; ?>">&ofcir; <?= $wallet->wallet; ?></option>
-                <?php endforeach; ?>
+                <?php
+                endforeach; ?>
             </select>
         </label>
 
@@ -36,26 +39,31 @@
             <label>
                 <span class="field icon-filter">Categoria:</span>
                 <select name="category">
-                    <?php foreach ($categories as $category): ?>
+                    <?php
+                    foreach ($categories as $category): ?>
                         <option <?= ($category->id == $invoice->category_id ? "selected" : ""); ?>
                                 value="<?= $category->id; ?>">&ofcir; <?= $category->name; ?></option>
-                    <?php endforeach; ?>
+                    <?php
+                    endforeach; ?>
                 </select>
             </label>
 
             <label>
                 <span class="field icon-filter">Status:</span>
                 <select name="status">
-                    <?php if ($invoice->type == "fixed_income" || $invoice->type == "fixed_expense"): ?>
+                    <?php
+                    if ($invoice->type == "fixed_income" || $invoice->type == "fixed_expense"): ?>
                         <option <?= ($invoice->status != 'paid' ?: "selected"); ?> value="paid">&ofcir; Ativa</option>
                         <option <?= ($invoice->status != 'unpaid' ?: "selected"); ?> value="unpaid">&ofcir; Inativa
                         </option>
-                    <?php else: ?>
+                    <?php
+                    else: ?>
                         <option <?= ($invoice->status == 'paid' ? "selected" : ""); ?> value="paid">
                             &ofcir; <?= ($invoice->type == 'income' ? "Recebida" : "Paga"); ?></option>
                         <option <?= ($invoice->status == 'unpaid' ? "selected" : ""); ?> value="unpaid">
                             &ofcir; <?= ($invoice->type == 'income' ? "Não recebida" : "Não paga"); ?></option>
-                    <?php endif; ?>
+                    <?php
+                    endif; ?>
                 </select>
             </label>
         </div>

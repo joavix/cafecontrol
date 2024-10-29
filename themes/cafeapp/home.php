@@ -1,4 +1,5 @@
-<?php $this->layout("_theme"); ?>
+<?php
+$this->layout("_theme"); ?>
     <div class="app_main_box">
         <section class="app_main_left">
             <article class="app_widget">
@@ -14,15 +15,20 @@
                         <h2 class="icon-calendar-minus-o">À receber:</h2>
                     </header>
                     <div class="app_widget_content">
-                        <?php if (!empty($income)): ?>
-                            <?php foreach ($income as $incomeItem): ?>
+                        <?php
+                        if (!empty($income)): ?>
+                            <?php
+                            foreach ($income as $incomeItem): ?>
                                 <?= $this->insert("views/balance", ["invoice" => $incomeItem->data()]); ?>
-                            <?php endforeach; ?>
-                        <?php else: ?>
+                            <?php
+                            endforeach; ?>
+                        <?php
+                        else: ?>
                             <div class="message success al-center icon-check-square-o">
                                 No momento, não existem contas a receber.
                             </div>
-                        <?php endif; ?>
+                        <?php
+                        endif; ?>
                         <a href="<?= url("app/receber"); ?>" title="Receitas"
                            class="app_widget_more transition">+ Receitas</a>
                     </div>
@@ -33,15 +39,20 @@
                         <h2 class="icon-calendar-check-o">À pagar:</h2>
                     </header>
                     <div class="app_widget_content">
-                        <?php if (!empty($expense)): ?>
-                            <?php foreach ($expense as $expenseItem): ?>
+                        <?php
+                        if (!empty($expense)): ?>
+                            <?php
+                            foreach ($expense as $expenseItem): ?>
                                 <?= $this->insert("views/balance", ["invoice" => $expenseItem->data()]); ?>
-                            <?php endforeach; ?>
-                        <?php else: ?>
+                            <?php
+                            endforeach; ?>
+                        <?php
+                        else: ?>
                             <div class="message error al-center icon-check-square-o">
                                 No momento, não existem contas a pagar.
                             </div>
-                        <?php endif; ?>
+                        <?php
+                        endif; ?>
                         <a href="<?= url("app/pagar"); ?>" title="Despesas"
                            class="app_widget_more transition">+ Despesas</a>
                     </div>
@@ -62,7 +73,11 @@
             <article
                     class="app_flex app_wallet <?= ($wallet->balance == "positive" ? "gradient-green" : "gradient-red"); ?>">
                 <header class="app_flex_title">
-                    <h2 class="icon-money radius"><?= (session()->has("walletfilter") ? (new \Source\Models\CafeApp\AppWallet())->findById(session()->walletfilter)->wallet : "Saldo Geral"); ?></h2>
+                    <h2 class="icon-money radius"><?= (session()->has(
+                            "walletfilter"
+                        ) ? (new \Source\Models\CafeApp\AppWallet())->findById(
+                            session()->walletfilter
+                        )->wallet : "Saldo Geral"); ?></h2>
                 </header>
 
                 <p class="app_flex_amount">R$ <?= str_price(($wallet->wallet ?? 0)); ?></p>
@@ -77,8 +92,10 @@
                     <h2 class="icon-graduation-cap">Aprenda:</h2>
                 </header>
                 <div class="app_widget_content">
-                    <?php if (!empty($posts)): ?>
-                        <?php foreach ($posts as $post): ?>
+                    <?php
+                    if (!empty($posts)): ?>
+                        <?php
+                        foreach ($posts as $post): ?>
                             <article class="app_widget_blog_article">
                                 <div class="thumb">
                                     <img alt="<?= $post->title; ?>" title="<?= $post->title; ?>"
@@ -89,8 +106,10 @@
                                        title="<?= $post->title; ?>"><?= str_limit_chars($post->title, 50); ?></a>
                                 </h3>
                             </article>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
+                        <?php
+                        endforeach; ?>
+                    <?php
+                    endif; ?>
                     <a target="_blank" href="<?= url("/blog"); ?>" title="Blog"
                        class="app_widget_more transition">Ver Mais...</a>
                 </div>
@@ -98,7 +117,8 @@
         </section>
     </div>
 
-<?php $this->start("scripts"); ?>
+<?php
+$this->start("scripts"); ?>
     <script type="text/javascript">
         $(function () {
 
@@ -180,4 +200,5 @@
             });
         });
     </script>
-<?php $this->end(); ?>
+<?php
+$this->end(); ?>

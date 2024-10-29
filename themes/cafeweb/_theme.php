@@ -33,13 +33,16 @@
                 <a class="link transition radius" title="Sobre" href="<?= url("/sobre"); ?>">Sobre</a>
                 <a class="link transition radius" title="Blog" href="<?= url("/blog"); ?>">Blog</a>
 
-                <?php if (\Source\Models\Auth::user()): ?>
+                <?php
+                if (\Source\Models\Auth::user()): ?>
                     <a class="link login transition radius icon-coffee" title="Controlar"
                        href="<?= url("/app"); ?>">Controlar</a>
-                <?php else: ?>
+                <?php
+                else: ?>
                     <a class="link login transition radius icon-sign-in" title="Entrar"
                        href="<?= url("/entrar"); ?>">Entrar</a>
-                <?php endif; ?>
+                <?php
+                endif; ?>
             </div>
         </nav>
     </div>
@@ -50,9 +53,11 @@
     <?= $this->section("content"); ?>
 </main>
 
-<?php if ($this->section("optout")): ?>
+<?php
+if ($this->section("optout")): ?>
     <?= $this->section("optout"); ?>
-<?php else: ?>
+<?php
+else: ?>
     <article class="footer_optout">
         <div class="footer_optout_content content">
             <span class="icon icon-coffee icon-notext"></span>
@@ -63,7 +68,8 @@
                 controlar</a>
         </div>
     </article>
-<?php endif; ?>
+<?php
+endif; ?>
 
 <!--FOOTER-->
 <footer class="main_footer">

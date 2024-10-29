@@ -1,4 +1,5 @@
-<?php $this->layout("_theme"); ?>
+<?php
+$this->layout("_theme"); ?>
 
 <section class="blog_page">
     <header class="blog_page_header">
@@ -12,7 +13,8 @@
         </form>
     </header>
 
-    <?php if (empty($blog) && !empty($search)): ?>
+    <?php
+    if (empty($blog) && !empty($search)): ?>
         <div class="content content">
             <div class="empty_content">
                 <h3 class="empty_content_title">Sua pesquisa não retornou resultados :/</h3>
@@ -22,7 +24,8 @@
             </div>
         </div>
 
-    <?php elseif (empty($blog)): ?>
+    <?php
+    elseif (empty($blog)): ?>
         <div class="content content">
             <div class="empty_content">
                 <h3 class="empty_content_title">Ainda estamos trabalhando aqui!</h3>
@@ -30,15 +33,20 @@
             </div>
         </div>
 
-    <?php else: ?>
+    <?php
+    else: ?>
         <div class="blog_content container content">
             <div class="blog_articles">
-                <?php foreach ($blog as $post): ?>
-                    <?php $this->insert("blog-list", ["post" => $post]); ?>
-                <?php endforeach; ?>
+                <?php
+                foreach ($blog as $post): ?>
+                    <?php
+                    $this->insert("blog-list", ["post" => $post]); ?>
+                <?php
+                endforeach; ?>
             </div>
 
             <?= $paginator; ?>
         </div>
-    <?php endif; ?>
+    <?php
+    endif; ?>
 </section>

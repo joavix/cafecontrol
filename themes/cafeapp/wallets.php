@@ -1,4 +1,5 @@
-<?php $this->layout("_theme"); ?>
+<?php
+$this->layout("_theme"); ?>
 
 <div class="ajax_response"></div>
 
@@ -26,7 +27,8 @@
 
     </article>
 
-    <?php foreach ($wallets as $wallet): $balance = $wallet->balance() ?>
+    <?php
+    foreach ($wallets as $wallet): $balance = $wallet->balance() ?>
         <article class="wallet radius <?= ($balance->balance == "positive" ? "gradient-green" : "gradient-red"); ?>">
             <span class="wallet_remove wallet_action icon-times-circle icon-notext"></span>
             <h2 class="icon-briefcase icon-notext"></h2>
@@ -49,5 +51,6 @@
                 </div>
             </div>
         </article>
-    <?php endforeach; ?>
+    <?php
+    endforeach; ?>
 </section>

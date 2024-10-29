@@ -1,4 +1,5 @@
-<?php $this->layout("_theme"); ?>
+<?php
+$this->layout("_theme"); ?>
 
     <!--FEATURED-->
     <article class="home_featured">
@@ -113,7 +114,8 @@
     </article>
 
     <!--BLOG-->
-<?php if (!empty($blog)): ?>
+<?php
+if (!empty($blog)): ?>
     <section class="blog">
         <div class="blog_content container content">
             <header class="blog_header">
@@ -122,10 +124,14 @@
             </header>
 
             <div class="blog_articles">
-                <?php foreach ($blog as $post): ?>
-                    <?php $this->insert("blog-list", ["post" => $post]); ?>
-                <?php endforeach; ?>
+                <?php
+                foreach ($blog as $post): ?>
+                    <?php
+                    $this->insert("blog-list", ["post" => $post]); ?>
+                <?php
+                endforeach; ?>
             </div>
         </div>
     </section>
-<?php endif; ?>
+<?php
+endif; ?>

@@ -1,4 +1,5 @@
-<?php $this->layout("_theme"); ?>
+<?php
+$this->layout("_theme"); ?>
 
 <div class="app_main_right" style="margin: 0;">
     <ul class="app_widget_shortcuts">
@@ -12,11 +13,13 @@
 </div>
 
 <section class="app_launch_box">
-    <?php if (!$invoices): ?>
+    <?php
+    if (!$invoices): ?>
         <div class="message info icon-info">Ainda não existem contas a fixas. Comece lançando
             suas recorrências.
         </div>
-    <?php else: ?>
+    <?php
+    else: ?>
         <div class="app_launch_item header">
             <p class="desc">Descrição</p>
             <p class="date">Vencimento</p>
@@ -33,8 +36,11 @@
                 <p class="desc app_invoice_link transition">
                     <a title="<?= $invoice->description; ?>" href="<?= url("/app/fatura/{$invoice->id}"); ?>">
                         <?= ($invoice->type == "fixed_income" ? "Receita / " : "Despesa / "); ?>
-                        <?= str_limit_words($invoice->description, 3,
-                            "&nbsp;<span class='icon-info icon-notext'></span>") ?>
+                        <?= str_limit_words(
+                            $invoice->description,
+                            3,
+                            "&nbsp;<span class='icon-info icon-notext'></span>"
+                        ) ?>
                     </a>
                 </p>
                 <p class="date">Dia <?= date_fmt($invoice->due_at, "d"); ?></p>
@@ -46,6 +52,8 @@
                     <span><?= ($invoice->period == "month" ? "/mês" : "/ano"); ?></span>
                 </p>
             </article>
-        <?php endforeach; ?>
-    <?php endif; ?>
+        <?php
+        endforeach; ?>
+    <?php
+    endif; ?>
 </section>

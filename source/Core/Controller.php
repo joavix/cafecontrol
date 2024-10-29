@@ -24,9 +24,9 @@ class Controller
      * Controller constructor
      * @param string|null $pathToViews
      */
-    public function __construct(string $pathToViews = null)
+    public function __construct(?string $pathToViews = null)
     {
-        $this->view = new View($pathToViews);
+        $this->view = $pathToViews ? new View($pathToViews) : null;
         $this->seo = new Seo();
         $this->message = new Message();
     }

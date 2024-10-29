@@ -32,8 +32,7 @@ class User extends Model
         string $email,
         string $password,
         string $document = null
-    ): User
-    {
+    ): User {
         $this->first_name = $firstName;
         $this->last_name = $lastName;
         $this->email = $email;
@@ -51,6 +50,14 @@ class User extends Model
     {
         $find = $this->find("email = :email", "email={$email}", $columns);
         return $find->fetch();
+    }
+
+    /**
+     * @return string
+     */
+    public function fullName(): string
+    {
+        return "{$this->first_name} {$this->last_name}";
     }
 
     /**

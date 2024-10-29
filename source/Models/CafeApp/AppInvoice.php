@@ -36,8 +36,10 @@ class AppInvoice extends Model
      */
     public function fixed(User $user, int $afterMonths = 1): void
     {
-        $fixed = $this->find("user_id = :user AND status = 'paid' AND type IN('fixed_income', 'fixed_expense') {$this->wallet}",
-            "user={$user->id}")->fetch(true);
+        $fixed = $this->find(
+            "user_id = :user AND status = 'paid' AND type IN('fixed_income', 'fixed_expense') {$this->wallet}",
+            "user={$user->id}"
+        )->fetch(true);
 
         if (!$fixed) {
             return;
@@ -58,8 +60,11 @@ class AppInvoice extends Model
 
             $period = new \DatePeriod($start, $interval, $end);
             foreach ($period as $item) {
-                $getFixed = $this->find("user_id = :user AND invoice_of = :of AND year(due_at) = :y AND month(due_at) = :m",
-                    "user={$user->id}&of={$fixedItem->id}&y={$item->format("Y")}&m={$item->format("m")}", "id")->fetch();
+                $getFixed = $this->find(
+                    "user_id = :user AND invoice_of = :of AND year(due_at) = :y AND month(due_at) = :m",
+                    "user={$user->id}&of={$fixedItem->id}&y={$item->format("Y")}&m={$item->format("m")}",
+                    "id"
+                )->fetch();
 
                 if (!$getFixed) {
                     $newItem = $fixedItem;
@@ -125,12 +130,14 @@ class AppInvoice extends Model
         $balance->balance = "positive";
 
 
-        $find = $this->find("user_id = :user AND status = :status",
+        $find = $this->find(
+            "user_id = :user AND status = :status",
             "user={$user->id}&status=paid",
             "
         (SELECT SUM(value) FROM app_invoices WHERE user_id = :user AND type = 'income' AND status = :status {$this->wallet}) AS income,
         (SELECT SUM(value) FROM app_invoices WHERE user_id = :user AND type = 'expense' AND status = :status {$this->wallet}) AS expense
-        ")->fetch();
+        "
+        )->fetch();
 
         if ($find) {
             $balance->income = abs($find->income);
@@ -157,7 +164,8 @@ class AppInvoice extends Model
         $balance->wallet = 0;
         $balance->balance = "positive";
 
-        $find = $this->find("user_id = :user AND statis = :status",
+        $find = $this->find(
+            "user_id = :user AND statis = :status",
             "user={$wallet->user_id}&status=paid",
             "
             (SELECT SUM(value) FROM app_invoices WHERE user_id = :user AND wallet_id = {$wallet->id} AND status = :status AND type = 'income') AS income,
@@ -172,7 +180,6 @@ class AppInvoice extends Model
         }
 
         return $balance;
-
     }
 
     /**
@@ -220,7 +227,8 @@ class AppInvoice extends Model
         $chartData->income = "0,0,0,0,0";
 
         $chart = (new AppInvoice())
-            ->find("user_id = :user AND status = :status AND due_at >= DATE(now() - INTERVAL 1 YEAR) GROUP BY year(due_at), month(due_at) ORDER BY due_at",
+            ->find(
+                "user_id = :user AND status = :status AND due_at >= DATE(now() - INTERVAL 1 YEAR) GROUP BY year(due_at), month(due_at) ORDER BY due_at",
                 "user={$user->id}&status=paid",
                 "
                     year(due_at) AS due_year,

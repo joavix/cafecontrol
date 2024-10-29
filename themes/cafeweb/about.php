@@ -1,4 +1,5 @@
-<?php $this->layout("_theme"); ?>
+<?php
+$this->layout("_theme"); ?>
 
     <section class="about_page">
         <div class="about_page_content content">
@@ -62,7 +63,8 @@
         </aside>
     </section>
 
-<?php if (!empty($faq)): ?>
+<?php
+if (!empty($faq)): ?>
     <section class="faq">
         <div class="faq_content content container">
             <header class="faq_header">
@@ -72,13 +74,16 @@
                 <p>Confira as principais dúvidas e repostas sobre o CaféControl.</p>
             </header>
             <div class="faq_asks">
-                <?php foreach ($faq as $question): ?>
+                <?php
+                foreach ($faq as $question): ?>
                     <article class="faq_ask j_collapse">
                         <h4 class="j_collapse_icon icon-plus"><?= $question->question; ?></h4>
                         <div class="faq_ask_coll j_collapse_box"><?= $question->response; ?></div>
                     </article>
-                <?php endforeach; ?>
+                <?php
+                endforeach; ?>
             </div>
         </div>
     </section>
-<?php endif; ?>
+<?php
+endif; ?>

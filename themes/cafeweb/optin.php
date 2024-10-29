@@ -1,4 +1,5 @@
-<?php $this->layout("_theme"); ?>
+<?php
+$this->layout("_theme"); ?>
 
     <article class="optin_page">
         <div class="container content">
@@ -6,18 +7,24 @@
                 <img alt="<?= $data->title; ?>" title="<?= $data->title; ?>" src="<?= $data->image; ?>"/>
                 <h1><?= $data->title; ?></h1>
                 <p><?= $data->desc; ?></p>
-                <?php if (!empty($data->link)): ?>
+                <?php
+                if (!empty($data->link)): ?>
                     <a class="optin_page_btn gradient gradient-green gradient-hover radius"
                        href="<?= $data->link; ?>" title="<?= $data->linkTitle; ?>"><?= $data->linkTitle; ?></a>
-                <?php endif; ?>
+                <?php
+                endif; ?>
             </div>
         </div>
     </article>
 
-<?php if (!empty($track)): ?>
-    <?php $this->start("scripts"); ?>
+<?php
+if (!empty($track)): ?>
+    <?php
+    $this->start("scripts"); ?>
     <script>
         gtag("event", "conversion", {send_to: "<?= $track->aw ?>"})
     </script>
-    <?php $this->end(); ?>
-<?php endif; ?>
+    <?php
+    $this->end(); ?>
+<?php
+endif; ?>

@@ -21,7 +21,9 @@ function is_email(string $email): bool
  */
 function is_passwd(string $password): bool
 {
-    if (password_get_info($password)['algo'] || (mb_strlen($password) >= CONF_PASSWD_MIN_LEN && mb_strlen($password) <= CONF_PASSWD_MAX_LEN)) {
+    if (password_get_info($password)['algo'] || (mb_strlen($password) >= CONF_PASSWD_MIN_LEN && mb_strlen(
+                $password
+            ) <= CONF_PASSWD_MAX_LEN)) {
         return true;
     }
 
@@ -40,12 +42,15 @@ function is_passwd(string $password): bool
  */
 function str_slug(string $string): string
 {
-    $string = filter_var(mb_strtolower($string), FILTER_SANITIZE_STRIPPED);
+    $string = filter_var(mb_strtolower($string), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $formats = 'ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜüÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûýýþÿRr"!@#$%&*()_-+={[}]/?;:.,\\\'<>°ºª';
     $replace = 'aaaaaaaceeeeiiiidnoooooouuuuuybsaaaaaaaceeeeiiiidnoooooouuuyybyRr                                 ';
 
-    $slug = str_replace(["-----", "----", "---", "--"], "-",
-        str_replace(" ", "-",
+    $slug = str_replace(["-----", "----", "---", "--"],
+        "-",
+        str_replace(
+            " ",
+            "-",
             trim(strtr(utf8_decode($string), utf8_decode($formats), $replace))
         )
     );
@@ -59,7 +64,9 @@ function str_slug(string $string): string
 function str_studly_case(string $string): string
 {
     $string = str_slug($string);
-    $studlyCase = str_replace(" ", "",
+    $studlyCase = str_replace(
+        " ",
+        "",
         mb_convert_case(str_replace("-", " ", $string), MB_CASE_TITLE)
     );
 
@@ -90,7 +97,7 @@ function str_title(string $string): string
  */
 function str_textarea(string $text): string
 {
-    $text = filter_var($text, FILTER_SANITIZE_STRIPPED);
+    $text = filter_var($text, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $arrayReplace = ["&#10;", "&#10;&#10;", "&#10;&#10;&#10;", "&#10;&#10;&#10;&#10;", "&#10;&#10;&#10;&#10;&#10;"];
     return "<p>" . str_replace($arrayReplace, "</p><p>", $text) . "</p>";
 }
